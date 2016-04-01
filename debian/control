@@ -1,0 +1,18 @@
+Source: netdata
+Section: unknown
+Priority: optional
+Maintainer: Fabrizio Furnari <fab.furnari@gmail.com>
+Build-Depends: debhelper (>= 9), dh-autoreconf, zlib1g-dev
+Standards-Version: 3.9.5
+Homepage: http://netdata.firehol.org/ 
+Vcs-Git: https://github.com/firehol/netdata.git
+Vcs-Browser: https://github.com/firehol/netdata 
+
+Package: netdata
+Architecture: any
+Depends: zlib1g, ${shlibs:Depends}, ${misc:Depends}
+Description: Real-time performance monitoring, done right!
+ netdata is a highly optimized Linux daemon providing real-time performance monitoring for 
+ Linux systems, Applications, SNMP devices, over the web!
+ It tries to visualize the truth of now, in its greatest detail, so that you can get 
+ insights of what is happening now and what just happened, on your systems and applications.

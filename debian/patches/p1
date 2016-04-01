@@ -1,0 +1,425 @@
+Description: <short summary of the patch>
+ TODO: Put a short summary on the line above and replace this paragraph
+ with a longer explanation of this change. Complete the meta-information
+ with other relevant fields (see below for details). To make it easier, the
+ information below has been extracted from the changelog. Adjust it or drop
+ it.
+ .
+ netdata (1.0.0-1) unstable; urgency=low
+ .
+   * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+Author: root <root@testdata>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: https://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+--- netdata-1.0.0.orig/README.md
++++ netdata-1.0.0/README.md
+@@ -1,20 +1,93 @@
+-netdata
+-=======
++# netdata
+ 
+-**Real-time performance monitoring, in the greatest possible detail**!
++**Real-time performance monitoring, done right!**
+ 
+-**netdata** tries to visualize the **truth of now**, in its **greatest detail**, so that you can get insights of what is happening now and what just happened, on your systems and applications.
++![netdata](https://cloud.githubusercontent.com/assets/2662304/14092712/93b039ea-f551-11e5-822c-beadbf2b2a2e.gif)
+ 
+-Read more at the **[netdata wiki](https://github.com/firehol/netdata/wiki)**.
++---
++
++## Features
++
++**netdata** is a highly optimized Linux daemon providing **real-time performance monitoring for Linux systems, Applications, SNMP devices, over the web**!
++
++It tries to visualize the **truth of now**, in its **greatest detail**, so that you can get insights of what is happening now and what just happened, on your systems and applications.
++
++This is what you get:
++
++1. **Beautiful out of the box** bootstrap dashboards
++2. **Custom dashboards** that can be built using simple HTML (no javascript necessary)
++3. **Blazingly fast** and **super efficient**, written in C (for default installations, expect just 2% of a single core CPU usage and a few MB of RAM)
++3. **Zero configuration** - you just install it and it autodetects everything
++4. **Zero dependencies**, it is its own web server for its static web files and its web API
++4. **Extensible**, you can monitor anything you can get a metric for, using its Plugin API (anything can be a netdata plugin - from BASH to node.js)
++7. **Embeddable**, it can run anywhere a Linux kernel runs
+ 
+ ---
+ 
+-# Features
++## What does it monitor?
++
++This is what it currently monitors (most with zero configuration):
++
++1. **CPU usage, interrupts, softirqs and frequency** (total and per core)
++2. **RAM, swap and kernel memory usage** (including KSM and kernel memory deduper)
++3. **Disk I/O** (per disk: bandwidth, operations, backlog, utilization, etc)
++
++   ![sda](https://cloud.githubusercontent.com/assets/2662304/14093195/c882bbf4-f554-11e5-8863-1788d643d2c0.gif)
++
++4. **Network interfaces** (per interface: bandwidth, packets, errors, drops, etc)
++
++   ![dsl0](https://cloud.githubusercontent.com/assets/2662304/14093128/4d566494-f554-11e5-8ee4-5392e0ac51f0.gif)
++
++5. **IPv4 networking** (packets, errors, fragments, tcp: connections, packets, errors, handshake, udp: packets, errors, broadcast: bandwidth, packets, multicast: bandwidth, packets)
++6. **netfilter / iptables Linux firewall** (connections, connection tracker events, errors, etc)
++7. **Processes** (running, blocked, forks, active, etc)
++8. **Entropy**
++9. **NFS file servers**, v2, v3, v4 (I/O, cache, read ahead, RPC calls)
++10. **Network QoS** (yes, the only tool that visualizes network `tc` classes in realtime)
++
++   ![qos-tc-classes](https://cloud.githubusercontent.com/assets/2662304/14093004/68966020-f553-11e5-98fe-ffee2086fafd.gif)
++
++
++11. **Applications**, by grouping the process tree (CPU, memory, disk reads, disk writes, swap, threads, pipes, sockets, etc)
+ 
+-Check wiki page **[Why netdata?](https://github.com/firehol/netdata/wiki/Why-netdata%3F)**.
++   ![apps](https://cloud.githubusercontent.com/assets/2662304/14093565/67c4002c-f557-11e5-86bd-0154f5135def.gif)
++
++12. **Apache web server** mod-status (v2.2, v2.4)
++13. **Nginx web server** stub-status
++14. **mySQL databases** (multiple servers, each showing: bandwidth, queries/s, handlers, locks, issues, tmp operations, connections, binlog metrics, threads, innodb metrics, etc)
++15. **ISC Bind name server** (multiple servers, each showing: clients, requests, queries, updates, failures and several per view metrics)
++16. **Postfix email server** message queue (entries, size)
++17. **Squid proxy server** (clients bandwidth and requests, servers bandwidth and requests) 
++18. **Hardware sensors** (temperature, voltage, fans, power, humidity, etc)
++19. **NUT UPSes** (load, charge, battery voltage, temperature, utility metrics, output metrics)
++
++Any number of **SNMP devices** can be monitored, although you will need to configure these.
++
++And you can extend it, by writing plugins that collect data from any source, using any computer language.
++
++---
++
++## Still not convinced?
++
++Read **[Why netdata?](https://github.com/firehol/netdata/wiki/Why-netdata%3F)**
+ 
+ ---
+ 
+-# Installation
++## Installation
++
++Use our **[automatic installer](https://github.com/firehol/netdata/wiki/Installation)** to build and install it on your system
++
++It should run on any Linux system. We have tested it on:
++
++- Gentoo
++- ArchLinux
++- Ubuntu / Debian
++- CentOS
++- Fedora
++
++---
++
++## Documentation
++
++Check the **[netdata wiki](https://github.com/firehol/netdata/wiki)**.
+ 
+-Check the **[Installation Wiki Page](https://github.com/firehol/netdata/wiki/Installation)**.
+--- netdata-1.0.0.orig/configure.ac
++++ netdata-1.0.0/configure.ac
+@@ -5,12 +5,12 @@ AC_PREREQ(2.60)
+ 
+ define([VERSION_MAJOR], [1])
+ define([VERSION_MINOR], [0])
+-define([VERSION_FIX], [0])
++define([VERSION_FIX], [1])
+ define([VERSION_NUMBER], VERSION_MAJOR[.]VERSION_MINOR[.]VERSION_FIX)
+-define([VERSION_SUFFIX], [])
++define([VERSION_SUFFIX], [_master])
+ 
+ dnl Set to "1" for a first RPM release of a new version
+-PACKAGE_RPM_RELEASE="1"
++PACKAGE_RPM_RELEASE="0.0.$(echo VERSION_SUFFIX | sed 's/^_//')"
+ 
+ AC_INIT([netdata], VERSION_NUMBER[]VERSION_SUFFIX)
+ 
+--- netdata-1.0.0.orig/netdata-installer.sh
++++ netdata-1.0.0/netdata-installer.sh
+@@ -100,7 +100,7 @@ It will be installed at these locations:
+ 
+   - the daemon    at ${NETDATA_PREFIX}/usr/sbin/netdata
+   - config files  at ${NETDATA_PREFIX}/etc/netdata
+-  - web files     at ${NETDATA_PREFIX}/usr/share/web/netdata
++  - web files     at ${NETDATA_PREFIX}/usr/share/netdata
+   - plugins       at ${NETDATA_PREFIX}/usr/libexec/netdata
+   - cache files   at ${NETDATA_PREFIX}/var/cache/netdata
+   - log files     at ${NETDATA_PREFIX}/var/log/netdata
+@@ -357,6 +357,10 @@ if [ ! -s "${NETDATA_PREFIX}/etc/netdata
+ 	# remove a possibly obsolete download
+ 	[ -f "${NETDATA_PREFIX}/etc/netdata/netdata.conf.new" ] && rm "${NETDATA_PREFIX}/etc/netdata/netdata.conf.new"
+ 
++	# disable a proxy to get data from the local netdata
++	export http_proxy=
++	export https_proxy=
++
+ 	# try wget
+ 	wget 2>/dev/null -O "${NETDATA_PREFIX}/etc/netdata/netdata.conf.new" "http://localhost:${NETDATA_PORT}/netdata.conf"
+ 	ret=$?
+--- netdata-1.0.0.orig/src/appconfig.c
++++ netdata-1.0.0/src/appconfig.c
+@@ -188,7 +188,7 @@ int load_config(char *filename, int over
+ 	if(!filename) filename = CONFIG_DIR "/" CONFIG_FILENAME;
+ 	FILE *fp = fopen(filename, "r");
+ 	if(!fp) {
+-		error("Cannot open file '%s'", CONFIG_DIR "/" CONFIG_FILENAME);
++		error("Cannot open file '%s'", filename);
+ 		return 0;
+ 	}
+ 
+--- netdata-1.0.0.orig/src/apps_plugin.c
++++ netdata-1.0.0/src/apps_plugin.c
+@@ -1104,7 +1104,9 @@ int update_from_proc(void)
+ 			if(!count_errors++ || debug || (p->target && p->target->debug))
+ 				error("Cannot process %s/proc/%d/io", host_prefix, pid);
+ 
+-			continue;
++			// on systems without /proc/X/io
++			// allow proceeding without I/O information
++			// continue;
+ 		}
+ 
+ 		// --------------------------------------------------------------------
+@@ -1992,7 +1994,7 @@ int main(int argc, char **argv)
+ 		if(usec < (update_every * 1000000ULL / 2)) susec = (update_every * 1000000ULL) - usec;
+ 		else susec = update_every * 1000000ULL / 2;
+ 
+-		usleep((__useconds_t) susec);
++		usleep((useconds_t) susec);
+ 		bcopy(&now, &last, sizeof(struct timeval));
+ 
+ 		// restart once per day (14400 seconds)
+--- netdata-1.0.0.orig/src/avl.c
++++ netdata-1.0.0/src/avl.c
+@@ -17,6 +17,7 @@
+ #include <config.h>
+ #endif
+ #include "avl.h"
++#include "log.h"
+ 
+ /* Private methods */
+ int _avl_removeroot(avl_tree* t);
+@@ -390,9 +391,14 @@ int avl_search(avl_tree* t, avl* a, int
+ void avl_init(avl_tree* t, int (*compar)(void* a, void* b)) {
+ 	t->root = NULL;
+ 	t->compar = compar;
++
++	int lock;
+ #ifdef AVL_LOCK_WITH_MUTEX
+-	pthread_mutex_init(&t->mutex, NULL);
++	lock = pthread_mutex_init(&t->mutex, NULL);
+ #else
+-	pthread_rwlock_init(&t->rwlock, NULL);
++	lock = pthread_rwlock_init(&t->rwlock, NULL);
+ #endif
++
++	if(lock != 0)
++		fatal("Failed to initialize AVL mutex/rwlock, error: %d", lock);
+ }
+--- netdata-1.0.0.orig/src/daemon.c
++++ netdata-1.0.0/src/daemon.c
+@@ -13,7 +13,6 @@
+ #include <pthread.h>
+ #include <sys/wait.h>
+ #include <sys/stat.h>
+-#include <execinfo.h>
+ 
+ #include "common.h"
+ #include "appconfig.h"
+--- netdata-1.0.0.orig/src/main.c
++++ netdata-1.0.0/src/main.c
+@@ -14,6 +14,7 @@
+ #include <sys/time.h>
+ #include <sys/resource.h>
+ #include <sys/mman.h>
++#include <sys/prctl.h>
+ 
+ #include "common.h"
+ #include "log.h"
+@@ -215,7 +216,7 @@ int main(int argc, char **argv)
+ 		else if(strcmp(argv[i], "-l")  == 0 && (i+1) < argc) { config_set("global", "history",      argv[i+1]); i++; }
+ 		else if(strcmp(argv[i], "-t")  == 0 && (i+1) < argc) { config_set("global", "update every", argv[i+1]); i++; }
+ 		else if(strcmp(argv[i], "-ch") == 0 && (i+1) < argc) { config_set("global", "host access prefix", argv[i+1]); i++; }
+-		else if(strcmp(argv[i], "-nodeamon") == 0 || strcmp(argv[i], "-nd") == 0) dont_fork = 1;
++		else if(strcmp(argv[i], "-nodaemon") == 0 || strcmp(argv[i], "-nd") == 0) dont_fork = 1;
+ 		else if(strcmp(argv[i], "--unittest")  == 0) {
+ 			rrd_update_every = 1;
+ 			if(run_all_mockup_tests()) exit(1);
+@@ -225,7 +226,7 @@ int main(int argc, char **argv)
+ 		}
+ 		else {
+ 			fprintf(stderr, "Cannot understand option '%s'.\n", argv[i]);
+-			fprintf(stderr, "\nUSAGE: %s [-d] [-l LINES_TO_SAVE] [-u UPDATE_TIMER] [-p LISTEN_PORT] [-dl debug log file] [-df debug flags].\n\n", argv[0]);
++			fprintf(stderr, "\nUSAGE: %s [-d] [-l LINES_TO_SAVE] [-u UPDATE_TIMER] [-p LISTEN_PORT] [-df debug flags].\n\n", argv[0]);
+ 			fprintf(stderr, "  -c CONFIG FILE the configuration file to load. Default: %s.\n", CONFIG_DIR "/" CONFIG_FILENAME);
+ 			fprintf(stderr, "  -l LINES_TO_SAVE can be from 5 to %d lines in JSON data. Default: %d.\n", RRD_HISTORY_ENTRIES_MAX, RRD_DEFAULT_HISTORY_ENTRIES);
+ 			fprintf(stderr, "  -t UPDATE_TIMER can be from 1 to %d seconds. Default: %d.\n", UPDATE_EVERY_MAX, UPDATE_EVERY);
+@@ -276,6 +277,7 @@ int main(int argc, char **argv)
+ 			struct rlimit rl = { RLIM_INFINITY, RLIM_INFINITY };
+ 			if(setrlimit(RLIMIT_CORE, &rl) != 0)
+ 				info("Cannot request unlimited core dumps for debugging... Proceeding anyway...");
++			prctl(PR_SET_DUMPABLE, 1, 0, 0, 0);
+ 		}
+ 
+ 		// --------------------------------------------------------------------
+@@ -420,6 +422,14 @@ int main(int argc, char **argv)
+ 		exit(1);
+ 	}
+ 
++	if(debug_flags != 0) {
++		struct rlimit rl = { RLIM_INFINITY, RLIM_INFINITY };
++		if(setrlimit(RLIMIT_CORE, &rl) != 0)
++			info("Cannot request unlimited core dumps for debugging... Proceeding anyway...");
++
++		prctl(PR_SET_DUMPABLE, 1, 0, 0, 0);
++	}
++
+ 	if(output_log_syslog || error_log_syslog || access_log_syslog)
+ 		openlog("netdata", LOG_PID, LOG_DAEMON);
+ 
+@@ -450,6 +460,8 @@ int main(int argc, char **argv)
+ 
+ 		if(st->enabled) {
+ 			st->thread = malloc(sizeof(pthread_t));
++			if(!st->thread)
++				fatal("Cannot allocate pthread_t memory");
+ 
+ 			info("Starting thread %s.", st->name);
+ 
+--- netdata-1.0.0.orig/src/plugin_nfacct.c
++++ netdata-1.0.0/src/plugin_nfacct.c
+@@ -16,6 +16,7 @@
+ #include <libmnl/libmnl.h>
+ #include <libnetfilter_acct/libnetfilter_acct.h>
+ 
++#include "main.h"
+ #include "global_statistics.h"
+ #include "common.h"
+ #include "appconfig.h"
+@@ -169,7 +170,7 @@ void *nfacct_main(void *ptr) {
+ 
+ 			st = rrdset_find_bytype("nfacct", "packets");
+ 			if(!st) {
+-				st = rrdset_create("nfacct", "packets", NULL, "netfilter", "Netfilter Accounting Packets", "packets/s", 1006, rrd_update_every, RRDSET_TYPE_STACKED);
++				st = rrdset_create("nfacct", "packets", NULL, "netfilter", NULL, "Netfilter Accounting Packets", "packets/s", 1006, rrd_update_every, RRDSET_TYPE_STACKED);
+ 
+ 				for(i = 0; i < nfacct_list->len ; i++)
+ 					rrddim_add(st, nfacct_list->data[i].name, NULL, 1, rrd_update_every, RRDDIM_INCREMENTAL);
+@@ -189,7 +190,7 @@ void *nfacct_main(void *ptr) {
+ 
+ 			st = rrdset_find_bytype("nfacct", "bytes");
+ 			if(!st) {
+-				st = rrdset_create("nfacct", "bytes", NULL, "netfilter", "Netfilter Accounting Bandwidth", "kilobytes/s", 1007, rrd_update_every, RRDSET_TYPE_STACKED);
++				st = rrdset_create("nfacct", "bytes", NULL, "netfilter", NULL, "Netfilter Accounting Bandwidth", "kilobytes/s", 1007, rrd_update_every, RRDSET_TYPE_STACKED);
+ 
+ 				for(i = 0; i < nfacct_list->len ; i++)
+ 					rrddim_add(st, nfacct_list->data[i].name, NULL, 1, 1000 * rrd_update_every, RRDDIM_INCREMENTAL);
+--- netdata-1.0.0.orig/src/plugin_tc.c
++++ netdata-1.0.0/src/plugin_tc.c
+@@ -346,11 +346,15 @@ static struct tc_device *tc_device_creat
+ 
+ 		d->classes_index.root = NULL;
+ 		d->classes_index.compar = tc_class_compare;
++
++		int lock;
+ #ifdef AVL_LOCK_WITH_MUTEX
+-		pthread_mutex_init(&d->classes_index.mutex, NULL);
++		lock = pthread_mutex_init(&d->classes_index.mutex, NULL);
+ #else
+-		pthread_rwlock_init(&d->classes_index.rwlock, NULL);
++		lock = pthread_rwlock_init(&d->classes_index.rwlock, NULL);
+ #endif
++		if(lock != 0)
++			fatal("Failed to initialize plugin_tc mutex/rwlock, return code %d.", lock);
+ 
+ 		tc_device_index_add(d);
+ 
+--- netdata-1.0.0.orig/src/proc_diskstats.c
++++ netdata-1.0.0/src/proc_diskstats.c
+@@ -195,6 +195,7 @@ int do_proc_diskstats(int update_every,
+ 			case 135: // scsi
+ 			case 153: // raid
+ 			case 202: // xen
++			case 253: // virtio
+ 			case 256: // flash
+ 			case 257: // flash
+ 				if(minor % 16) def_enabled = 0; // partitions
+--- netdata-1.0.0.orig/src/proc_stat.c
++++ netdata-1.0.0/src/proc_stat.c
+@@ -47,8 +47,8 @@ int do_proc_stat(int update_every, unsig
+ 	for(l = 0; l < lines ;l++) {
+ 		if(strncmp(procfile_lineword(ff, l, 0), "cpu", 3) == 0) {
+ 			words = procfile_linewords(ff, l);
+-			if(words < 10) {
+-				error("Cannot read /proc/stat cpu line. Expected 10 params, read %d.", words);
++			if(words < 9) {
++				error("Cannot read /proc/stat cpu line. Expected 9 params, read %d.", words);
+ 				continue;
+ 			}
+ 
+@@ -64,7 +64,7 @@ int do_proc_stat(int update_every, unsig
+ 			irq			= strtoull(procfile_lineword(ff, l, 6), NULL, 10);
+ 			softirq		= strtoull(procfile_lineword(ff, l, 7), NULL, 10);
+ 			steal		= strtoull(procfile_lineword(ff, l, 8), NULL, 10);
+-			guest		= strtoull(procfile_lineword(ff, l, 9), NULL, 10);
++			if(words >= 10) guest		= strtoull(procfile_lineword(ff, l, 9), NULL, 10);
+ 			if(words >= 11) guest_nice	= strtoull(procfile_lineword(ff, l, 10), NULL, 10);
+ 
+ 			char *title = "Core utilization";
+--- netdata-1.0.0.orig/src/url.c
++++ netdata-1.0.0/src/url.c
+@@ -31,6 +31,9 @@ char *url_encode(char *str) {
+ 		*buf = malloc(strlen(str) * 3 + 1),
+ 		*pbuf = buf;
+ 
++	if(!buf)
++		fatal("Cannot allocate memory.");
++
+ 	while (*pstr) {
+ 		if (isalnum(*pstr) || *pstr == '-' || *pstr == '_' || *pstr == '.' || *pstr == '~')
+ 			*pbuf++ = *pstr;
+@@ -56,7 +59,8 @@ char *url_decode(char *str) {
+ 		*buf = malloc(strlen(str) + 1),
+ 		*pbuf = buf;
+ 
+-	if(!buf) fatal("Cannot allocate memory.");
++	if(!buf)
++		fatal("Cannot allocate memory.");
+ 
+ 	while (*pstr) {
+ 		if (*pstr == '%') {
+--- netdata-1.0.0.orig/src/web_client.c
++++ netdata-1.0.0/src/web_client.c
+@@ -268,7 +268,7 @@ int mysendfile(struct web_client *w, cha
+ 	for(s = filename; *s ;s++) {
+ 		if( !isalnum(*s) && *s != '/' && *s != '.' && *s != '-' && *s != '_') {
+ 			debug(D_WEB_CLIENT_ACCESS, "%llu: File '%s' is not acceptable.", w->id, filename);
+-			buffer_sprintf(w->response.data, "File '%s' cannot be served. Filename contains invalid character '%c'", *s);
++			buffer_sprintf(w->response.data, "File '%s' cannot be served. Filename contains invalid character '%c'", filename, *s);
+ 			return 400;
+ 		}
+ 	}
+@@ -292,9 +292,9 @@ int mysendfile(struct web_client *w, cha
+ 		return 404;
+ 	}
+ 
+-	// check if the file is owned by us
++	// check if the file is owned by expected user
+ 	if(stat.st_uid != web_files_uid()) {
+-		error("%llu: File '%s' is owned by user %d (I run as user %d). Access Denied.", w->id, webfilename, stat.st_uid, getuid());
++		error("%llu: File '%s' is owned by user %d (expected user %d). Access Denied.", w->id, webfilename, stat.st_uid, web_files_uid());
+ 		buffer_sprintf(w->response.data, "Access to file '%s' is not permitted.", filename);
+ 		return 403;
+ 	}
